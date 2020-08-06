@@ -113,16 +113,35 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
-  _requestPop() {
+  Future<bool> _requestPop() {
     if (_userEdited) {
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Descartar Alterações'),
+            title: Text('Descartar Alterações?'),
+            content: Text('Se sair as alterações serão perdidas.'),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancelar'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: Text('Sim'),
+              ),
+            ],
           );
         },
       );
+      return Future.value(false);
+    } else {
+      return Future.value(true);
     }
   }
 }

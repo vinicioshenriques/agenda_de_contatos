@@ -2,6 +2,7 @@ import 'package:agenda_de_contatos/ui/contact_page.dart';
 import 'package:agenda_de_contatos/helpers/contact_helper.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -67,29 +68,31 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Flexible(
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         contacts[index].name ?? '',
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      Divider(),
                       Text(
                         contacts[index].email ?? '',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
+                      Divider(),
                       Text(
                         contacts[index].phone ?? '',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                     ],
@@ -117,25 +120,46 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  FlatButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Ligar',
-                      style: TextStyle(color: Colors.red, fontSize: 20.0),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        launch('tel:${contacts[index].phone}');
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Ligar',
+                        style: TextStyle(color: Colors.red, fontSize: 20.0),
+                      ),
                     ),
                   ),
-                  FlatButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Ligar',
-                      style: TextStyle(color: Colors.red, fontSize: 20.0),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _showContactPage(contact: contacts[index]);
+                      },
+                      child: Text(
+                        'Editar',
+                        style: TextStyle(color: Colors.red, fontSize: 20.0),
+                      ),
                     ),
                   ),
-                  FlatButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Ligar',
-                      style: TextStyle(color: Colors.red, fontSize: 20.0),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        helper.deleteContact(contacts[index].id);
+                        setState(() {
+                          contacts.removeAt(index);
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Excluir',
+                        style: TextStyle(color: Colors.red, fontSize: 20.0),
+                      ),
                     ),
                   ),
                 ],
